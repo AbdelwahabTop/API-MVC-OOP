@@ -8,13 +8,7 @@ class Home
 {
     public function index(): string
     {
-        return <<<FORM
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <input name="receipt" type="file">
-            <input name="myimage" type="file">
-            <button type="submit">Upload</button>
-        </form>
-        FORM;
+        return (new View('index'))->render();
     }
 
     public function upload()

@@ -8,15 +8,12 @@ class Invoice
 {
     public function index()
     {
-        return 'Invoices';
+        return '';
     }
 
     public function create(): string
     {
-        return '<form action="/invoices/create" method="post">
-                    <label>Amount</label>
-                    <input name="amount" type="text">
-                </form>';
+        return '';
     }
 
     public function store()
