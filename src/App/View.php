@@ -19,7 +19,7 @@ class View
         return new static($view, $params);
     }
 
-    public function render()
+    public function render(): string
     {
 
         $viewPath = VIEW_PATH . '/' . $this->view . '.php';
