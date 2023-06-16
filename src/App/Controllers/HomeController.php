@@ -17,24 +17,47 @@ class HomeController
             throw new \PDOException($e->getMessage(), $e->getCode());
         }
 
-        $email = 'abdo@gmail.com';
-        $name = 'abdo';
-        $isActive = 1;
-        $createdAt = date('Y-m-d H:m:i', strtotime('07/11/2021 9:00PM'));
-        $query = 'INSERT INTO users (email, full_name, is_active, create_at)
-                VALUES (?, ?, ?, ?)';
+        $email = 'shedo@gmail.com';
+        $name = 'shedo';
+        $amount = 1;
 
-        $stmt = $db->prepare($query);
+        // $createdAt = date('Y-m-d H:m:i', strtotime('07/11/2021 9:00PM'));
+        try {
+            $db->beginTransaction();
 
-        $stmt->execute([$email, $name, $isActive, $createdAt]);
+            $newUserStmt = $db->prepare(
+                'INSERT INTO users (email, full_name, is_active, created_at) 
+                VALUES (?, ?, 1, NOW())'
+            );
 
-        $id = (int) $db->lastInsertId();
+            $newInvoiceStmt = $db->prepare(
+                'INSERT INTO invoices (amount, user_id) 
+                VALUES (?, ?)'
+            );
 
-        $user = $db->query('SELECT * FROM users WHERE id = ' . $id);
+            $newUserStmt->execute([$email, $name]);
 
-        dump($stmt->fetchAll());
+            $userId = (int) $db->lastInsertId();
 
-        var_dump($db);
+            $newInvoiceStmt->execute([$amount, $userId]);
+
+            $db->commit();
+        } catch (\Throwable $e) {
+            if ($db->inTransaction()) {
+                $db->rollBack();
+            }
+        }
+
+        $fetchStmt = $db->prepare(
+            'SELECT invoices.id AS invoice_id, amount, user_id, full_name
+             FROM invoices
+             INNER JOIN users ON user_id = users.id
+             WHERE email = ?'
+        );
+
+        $fetchStmt->execute([$email]);
+
+        dump($fetchStmt->fetchAll());
 
         return View::make('index', ['foo' => 'bar']);
     }
