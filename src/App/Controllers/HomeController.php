@@ -16,11 +16,15 @@ class HomeController
                 // PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
             ]);
 
-            $query = 'SELECT * FROM users';
+            $email = $_GET['email'];
+            $query = 'SELECT * FROM users WHERE email = ?';
 
-            $stmt = $db->query($query);
+            $stmt = $db->prepare($query);
+
+            $stmt->execute([$email]);
 
             dump($stmt->fetchAll());
+
         } catch (\PDOException $e) {
             throw new \PDOException($e->getMessage(), $e->getCode());
         }
