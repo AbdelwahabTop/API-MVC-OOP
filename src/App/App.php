@@ -1,15 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
+use PDO;
 use App\View;
 use App\Router;
 use App\Exceptions\RouteNotFoundException;
 
 class App
 {
-    public function __construct(protected Router $router, protected array $request)
+    private static DB $db;
+
+    public function __construct(protected Router $router, protected array $request, protected array $config)
     {
+        static::$db = new DB($config);
+    }
+
+    public static function db(): DB
+    {
+        return static::$db;
     }
 
     public function run()

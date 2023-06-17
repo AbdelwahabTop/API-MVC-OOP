@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\App;
 use App\View;
 use PDO;
 
@@ -11,16 +12,7 @@ class HomeController
 {
     public function index(): View
     {
-        var_dump($_ENV['DB_HOST']);
-        try {
-            $db = new PDO(
-                'mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_DATABASE'],
-                $_ENV['DB_USER'],
-                $_ENV['DB_PASS']
-            );
-        } catch (\PDOException $e) {
-            throw new \PDOException($e->getMessage(), $e->getCode());
-        }
+        $db = App::db();
 
         $email = 'mshmsh@gmail.com';
         $name = 'mshmsh';
