@@ -14,8 +14,8 @@ class HomeController
     {
         $db = App::db();
 
-        $email = 'mshmsh@gmail.com';
-        $name = 'mshmsh';
+        $email = 'xd@gmail.com';
+        $name = 'xd';
         $amount = 1;
 
         // $createdAt = date('Y-m-d H:m:i', strtotime('07/11/2021 9:00PM'));
