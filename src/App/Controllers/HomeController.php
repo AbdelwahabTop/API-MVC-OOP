@@ -6,7 +6,8 @@ namespace App\Controllers;
 
 use App\App;
 use App\View;
-use PDO;
+use App\Models\User;
+use App\Models\Invoice;
 
 class HomeController
 {
@@ -14,8 +15,8 @@ class HomeController
     {
         $db = App::db();
 
-        $email = 'xd@gmail.com';
-        $name = 'xd';
+        $email = 'kiloa@gmail.com';
+        $name = 'kiloa';
         $amount = 1;
 
         // $createdAt = date('Y-m-d H:m:i', strtotime('07/11/2021 9:00PM'));
@@ -28,14 +29,6 @@ class HomeController
             $userId = $userModel->create($email, $name);
             $invoiceId = $invoiceModel->create($amount, $userId);
 
-
-            $newInvoiceStmt = $db->prepare(
-                'INSERT INTO invoices (amount, user_id) 
-                VALUES (?, ?)'
-            );
-
-            $newInvoiceStmt->execute([$amount, $userId]);
-
             $db->commit();
         } catch (\Throwable $e) {
             if ($db->inTransaction()) {
@@ -45,16 +38,7 @@ class HomeController
             throw $e;
         }
 
-        $fetchStmt = $db->prepare(
-            'SELECT invoices.id AS invoice_id, amount, user_id, full_name
-             FROM invoices
-             INNER JOIN users ON user_id = users.id
-             WHERE email = ?'
-        );
-
-        $fetchStmt->execute([$email]);
-
-        return View::make('index', ['foo' => 'bar']);
+        return View::make('index', ['invoice' => $invoiceModel->find($invoiceId)]);
     }
 
     public function upload()
