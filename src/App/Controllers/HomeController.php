@@ -22,8 +22,8 @@ class HomeController
             throw new \PDOException($e->getMessage(), $e->getCode());
         }
 
-        $email = 'shedo@gmail.com';
-        $name = 'shedo';
+        $email = 'mshmsh@gmail.com';
+        $name = 'mshmsh';
         $amount = 1;
 
         // $createdAt = date('Y-m-d H:m:i', strtotime('07/11/2021 9:00PM'));
@@ -51,6 +51,8 @@ class HomeController
             if ($db->inTransaction()) {
                 $db->rollBack();
             }
+
+            throw $e;
         }
 
         $fetchStmt = $db->prepare(
@@ -61,8 +63,6 @@ class HomeController
         );
 
         $fetchStmt->execute([$email]);
-
-        // dump($fetchStmt->fetchAll());
 
         return View::make('index', ['foo' => 'bar']);
     }
