@@ -11,7 +11,7 @@ class Invoice extends Model
     public function create(float $amount, int $userId): int
     {
         $stmt = $this->db->prepare(
-            'INSERT INTO invoices (email, full_name, is_active, created_at) 
+            'INSERT INTO invoices (amount, user_id) 
             VALUES (?, ?)'
         );
 

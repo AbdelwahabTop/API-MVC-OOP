@@ -1,4 +1,4 @@
-<h1><?= $foo ?></h1>
+<h1><?= dump($invoice) ?></h1>
 
 <form action="/upload" method="post" enctype="multipart/form-data">
     <input name="receipt" type="file">

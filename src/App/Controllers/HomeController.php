@@ -4,39 +4,31 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\App;
 use App\View;
 use App\Models\User;
+use App\Models\SignUp;
 use App\Models\Invoice;
 
 class HomeController
 {
     public function index(): View
     {
-        $db = App::db();
-
-        $email = 'kiloa@gmail.com';
-        $name = 'kiloa';
+        $email = 'baki@gmail.com';
+        $name = 'baki';
         $amount = 1;
 
-        // $createdAt = date('Y-m-d H:m:i', strtotime('07/11/2021 9:00PM'));
-        try {
-            $db->beginTransaction();
+        $userModel = new User();
+        $invoiceModel = new Invoice();
 
-            $userModel = new User();
-            $invoiceModel = new Invoice();
-
-            $userId = $userModel->create($email, $name);
-            $invoiceId = $invoiceModel->create($amount, $userId);
-
-            $db->commit();
-        } catch (\Throwable $e) {
-            if ($db->inTransaction()) {
-                $db->rollBack();
-            }
-
-            throw $e;
-        }
+        $invoiceId = (new SignUp($userModel, $invoiceModel))->register(
+            [
+                'email' => $email,
+                'name' => $name,
+            ],
+            [
+                'amount' => $amount
+            ]
+        );
 
         return View::make('index', ['invoice' => $invoiceModel->find($invoiceId)]);
     }

@@ -13,6 +13,6 @@ abstract class Model
 
     public function __construct()
     {
-        $this->db =  App::db();
+        $this->db = App::db();
     }
 }
