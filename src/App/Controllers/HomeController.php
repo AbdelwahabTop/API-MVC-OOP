@@ -22,19 +22,17 @@ class HomeController
         try {
             $db->beginTransaction();
 
-            $newUserStmt = $db->prepare(
-                'INSERT INTO users (email, full_name, is_active, created_at) 
-                VALUES (?, ?, 1, NOW())'
-            );
+            $userModel = new User();
+            $invoiceModel = new Invoice();
+
+            $userId = $userModel->create($email, $name);
+            $invoiceId = $invoiceModel->create($amount, $userId);
+
 
             $newInvoiceStmt = $db->prepare(
                 'INSERT INTO invoices (amount, user_id) 
                 VALUES (?, ?)'
             );
-
-            $newUserStmt->execute([$email, $name]);
-
-            $userId = (int) $db->lastInsertId();
 
             $newInvoiceStmt->execute([$amount, $userId]);
 
